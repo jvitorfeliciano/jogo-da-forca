@@ -39,10 +39,16 @@ figure img {
     top: 30px;
     right:40px;
 }
+.hangman button:hover, .keyboard button:hover, .guesswork button:hover  {
+    filter: brightness(120%);
+}
 .word{
     position:absolute;
     bottom:30px;
     right: 40px;
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 3px;
 }
 .keyboard{
     width: 660px;
@@ -81,8 +87,13 @@ figure img {
     border-radius: 3px;
     margin-left: 15px;
     font-size: 20px;
+    padding-left: 10px;
 }
-
+.guesswork input:focus{
+    outline: 3px solid  rgb(57, 115, 157);
+    border: none;
+    letter-spacing: 1px;
+}
 .guesswork button {
     width:75px;
     height: 40px;
