@@ -40,13 +40,14 @@ const imgArchive = [
   "./assets/forca6.png",
 ];
 
-let randomNumber, wordVector, letterReceived, assistent;
+let randomNumber, wordVector, letterReceived, assistent, adress;
 let counterMistakes = 0;
 
 export default function App() {
   const [displayWord, setDisplayWord] = React.useState("");
   const [imgHanged, setImgHanged] = React.useState(imgArchive[counterMistakes]);
   const [colorState, setColorState] = React.useState("word");
+  const [guessedWord, setGuessedWord]=React.useState("")
 
   function resetGame() {
     assistent = undefined;
@@ -99,24 +100,43 @@ export default function App() {
   }
   function getLetter(e) {
     // condição para resolver o bug da imagem sumir, quando contador de erro for igual a 6 a função retorna e nada mais é executado dentro dela;
-    if (counterMistakes === 6 || assistent.join("") === wordVector.join("")) {
+    if (wordVector===undefined || counterMistakes === 6 || assistent.join("") === wordVector.join("")) {
       return;
     }
-
+    
+    adress = e.target.id
+    console.log(adress)
     letterReceived = e.target.value;
     if (wordVector !== undefined) {
       validateChosenLetter();
     }
   }
   function removeSpecials(text) {
-    text = text.replace(/[àáâãäå]/, "a");
-    text = text.replace(/[ôóò]/, "o");
-    text = text.replace(/[ûúù]/, "u");
-    text = text.replace(/[îíì]/, "i");
+    text = text.replace(/[àáâã]/, "a");
+    text = text.replace(/[ôóòõ]/, "o");
+    text = text.replace(/[êéèẽ]/, "e");
+    text = text.replace(/[ûúùũ]/, "u");
+    text = text.replace(/[îíìĩ]/, "i");
     text = text.replace(/[ç]/, "c");
     return text.replace(/[^a-z0-9]/gi, "");
   }
 
+ function validateInput() {
+      if(guessedWord=== wordVector.join("")){
+        setColorState("wentRight");
+        setDisplayWord(wordVector)
+        setGuessedWord('')
+      } 
+      else {
+        counterMistakes=6
+        setColorState("wentWrong")
+        setImgHanged(imgArchive[counterMistakes])
+        setGuessedWord('')
+        setDisplayWord(wordVector)
+      }
+     
+    }
+    
   return (
     <main>
       <section className="hangman">
@@ -132,6 +152,7 @@ export default function App() {
         {alfabeto.map((k, index) => (
           <button
             key={index}
+            id={index}
             type="button"
             value={k}
             onClick={(e) => getLetter(e)}
@@ -143,8 +164,8 @@ export default function App() {
       <section className="guesswork">
         <form>
           <label>Já sei a palavra!</label>
-          <input type="text" />
-          <button type="button">Chutar</button>
+          <input onChange={(event)=>setGuessedWord(event.target.value)} value={guessedWord}type="text" />
+          <button onClick={validateInput} type="button">Chutar</button>
         </form>
       </section>
     </main>
