@@ -40,7 +40,7 @@ figure img {
     right:40px;
 }
 .hangman button:hover, .keyboard button:hover, .guesswork button:hover  {
-    filter: brightness(120%);
+    filter: brightness(70%);
 }
 .word{
     position:absolute;
@@ -49,6 +49,24 @@ figure img {
     font-size: 40px;
     font-weight: bold;
     letter-spacing: 3px;
+}
+.wentWrong{
+    position:absolute;
+    bottom:30px;
+    right: 40px;
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color:red;
+}
+.wentRight{
+    position:absolute;
+    bottom:30px;
+    right: 40px;
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: rgb(42, 174, 96);
 }
 .keyboard{
     width: 660px;
