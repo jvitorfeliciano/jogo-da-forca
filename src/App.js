@@ -1,34 +1,6 @@
 import palavras from "./palavras";
-import React from "react";
-
-const alfabeto = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
+import {useState} from "react";
+import alfabeto from "./alfabeto";
 
 const imgArchive = [
   "./assets/forca0.png",
@@ -39,15 +11,22 @@ const imgArchive = [
   "./assets/forca5.png",
   "./assets/forca6.png",
 ];
-
+const adressArchive = alfabeto.map((letter,index)=>index)
 let randomNumber, wordVector, letterReceived, assistent, adress;
 let counterMistakes = 0;
 
 export default function App() {
-  const [displayWord, setDisplayWord] = React.useState("");
-  const [imgHanged, setImgHanged] = React.useState(imgArchive[counterMistakes]);
-  const [colorState, setColorState] = React.useState("word");
-  const [guessedWord, setGuessedWord]=React.useState("")
+  const [displayWord, setDisplayWord] = useState("");
+  const [imgHanged, setImgHanged] = useState(imgArchive[counterMistakes]);
+  const [colorState, setColorState] = useState("word");
+  const [guessedWord, setGuessedWord]=useState("")
+  const [vectorAdress, setVectorAdress] =useState([...adressArchive])
+  const [inputstate, setInputState] = useState(true)
+  
+  function enableButtonAndInput(){
+    setVectorAdress([])
+    setInputState(false)
+  }
 
   function resetGame() {
     assistent = undefined;
@@ -57,11 +36,21 @@ export default function App() {
     setColorState("word");
   }
 
+  function removeSpecials(text) {
+    text = text.replace(/[àáâã]/, "a");
+    text = text.replace(/[ôóòõ]/, "o");
+    text = text.replace(/[êéèẽ]/, "e");
+    text = text.replace(/[ûúùũ]/, "u");
+    text = text.replace(/[îíìĩ]/, "i");
+    text = text.replace(/[ç]/, "c");
+    return text.replace(/[^a-z0-9]/gi, "");
+  }
+
   function chooseWord() {
     if (wordVector !== undefined) {
       resetGame();
     }
-
+    enableButtonAndInput()
     randomNumber = Math.floor(Math.random() * palavras.length);
     wordVector = palavras[randomNumber].split("");
     assistent = wordVector.map((p) => " _");
@@ -79,6 +68,8 @@ export default function App() {
     setDisplayWord([...assistent]);
     if (assistent.join("") === wordVector.join("")) {
       setColorState("wentRight");
+      setVectorAdress([...adressArchive])
+      setInputState(true)
     }
   }
 
@@ -89,6 +80,8 @@ export default function App() {
     if (counterMistakes === 6) {
       setDisplayWord([...wordVector]);
       setColorState("wentWrong");
+      setVectorAdress([...adressArchive])
+      setInputState(true)
     }
   }
   function validateChosenLetter() {
@@ -103,29 +96,26 @@ export default function App() {
     if (wordVector===undefined || counterMistakes === 6 || assistent.join("") === wordVector.join("")) {
       return;
     }
-    
-    adress = e.target.id
+
+    adress = Number(e.target.id)
+    setVectorAdress([...vectorAdress,adress])
     console.log(adress)
     letterReceived = e.target.value;
     if (wordVector !== undefined) {
       validateChosenLetter();
     }
   }
-  function removeSpecials(text) {
-    text = text.replace(/[àáâã]/, "a");
-    text = text.replace(/[ôóòõ]/, "o");
-    text = text.replace(/[êéèẽ]/, "e");
-    text = text.replace(/[ûúùũ]/, "u");
-    text = text.replace(/[îíìĩ]/, "i");
-    text = text.replace(/[ç]/, "c");
-    return text.replace(/[^a-z0-9]/gi, "");
-  }
-
+  
  function validateInput() {
-      if(guessedWord=== wordVector.join("")){
+      if(guessedWord===""){  // impedir de usar o input quando este estiver desabalitado
+        return
+      }
+      if(guessedWord.split(' ').join('')=== wordVector.join("")){
         setColorState("wentRight");
         setDisplayWord(wordVector)
         setGuessedWord('')
+        setVectorAdress([...adressArchive])
+        setInputState(true)
       } 
       else {
         counterMistakes=6
@@ -133,6 +123,8 @@ export default function App() {
         setImgHanged(imgArchive[counterMistakes])
         setGuessedWord('')
         setDisplayWord(wordVector)
+        setVectorAdress([...adressArchive])
+        setInputState(true)
       }
      
     }
@@ -151,6 +143,8 @@ export default function App() {
       <section className="keyboard">
         {alfabeto.map((k, index) => (
           <button
+            disabled ={vectorAdress.includes(index)? true:false}
+            className={vectorAdress.includes(index)? "disabled":"enabled"}
             key={index}
             id={index}
             type="button"
@@ -164,7 +158,7 @@ export default function App() {
       <section className="guesswork">
         <form>
           <label>Já sei a palavra!</label>
-          <input onChange={(event)=>setGuessedWord(event.target.value)} value={guessedWord}type="text" />
+          <input disabled={inputstate ? true: false} onChange={(event)=>setGuessedWord(event.target.value)} value={guessedWord}type="text" />
           <button onClick={validateInput} type="button">Chutar</button>
         </form>
       </section>
