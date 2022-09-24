@@ -14,6 +14,7 @@ main {
   height: 476px;
   position: relative;
   background-color: rgb(255, 255, 255);
+
 }
 
 figure {
@@ -32,7 +33,7 @@ figure img {
   background-color: rgb(42, 174, 96);
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   position: absolute;
@@ -50,7 +51,8 @@ figure img {
   right: 40px;
   font-size: 40px;
   font-weight: bold;
-  letter-spacing: 3px;
+  letter-spacing: 8px;
+  color: black;
 }
 .wentWrong {
   position: absolute;
