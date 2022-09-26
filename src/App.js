@@ -30,7 +30,7 @@ const adressArchive = alfabeto.map((letter, index) => index);
 export default function App() {
   const [displayWord, setDisplayWord] = useState("");
   const [imgHanged, setImgHanged] = useState(imgArchive[counterMistakes]);
-  const [colorState, setColorState] = useState("word");
+  const [colorState, setColorState] = useState("black");
   const [guessedWord, setGuessedWord] = useState("");
   const [vectorAdress, setVectorAdress] = useState([...adressArchive]);
   const [inputstate, setInputState] = useState(true);
@@ -48,7 +48,7 @@ export default function App() {
     letterAdress = undefined;
     counterMistakes = 0;
     setImgHanged([imgArchive[counterMistakes]]);
-    setColorState("word");
+    setColorState("black");
     setGuessedWord("");
   }
 
@@ -235,7 +235,7 @@ const DisplayedWord = styled.div`
   right: 40px;
   font-size: 40px;
   font-weight: bold;
-  letter-spacing: 8px;
+  letter-spacing: ${(props) => (props.color === "black" ? "8px" : "2px")};
   color: ${(props) => props.color};
 `;
 const Keyboard = styled.section`
@@ -254,7 +254,8 @@ const KeyboardButton = styled.button`
   border: ${(props) =>
     props.condition === true ? "none" : "1px solid #39739e"};
   color: ${(props) => (props.condition === true ? "#83878e" : "#39739e")};
-  background-color: ${(props) => (props.condition ? "#9faab5" : "e1ecf6")};
+  background-color: ${(props) =>
+    props.condition === true ? "#9faab5" : "e1ecf6"};
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
